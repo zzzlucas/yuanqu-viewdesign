@@ -18,10 +18,12 @@
 </template>
 
 <script>
-import {api_login} from './api/login'
+import {login} from '@/api/login'
+import qs from 'qs'
+
 export default {
   name: 'LoginIndex',
-  data() {
+  data () {
     return {
       form: {
         username: '',
@@ -30,13 +32,10 @@ export default {
     }
   },
   methods: {
-    async login() {
-      let form = new FormData()
-      form.append('username', this.form.username);
-      form.append('password', this.form.password);
-      let _data = await api_login(form);
-      let res = _data;
-      console.log(res)
+    login () {
+      login(qs.stringify(this.form)).then(res => {
+        console.log(res)
+      })
     }
   }
 }
