@@ -19,7 +19,7 @@
 
 <script>
 import {login} from '@/api/login'
-import qs from 'qs'
+import {mapActions} from 'vuex'
 
 export default {
   name: 'LoginIndex',
@@ -32,9 +32,16 @@ export default {
     }
   },
   methods: {
+    ...mapActions('User', {
+      UserInfo: 'login'
+    }),
     login () {
-      login(qs.stringify(this.form)).then(res => {
-        console.log(res)
+      login(this.form).then(res => {
+        if (res.success && res.code === 200) {
+          this.UserInfo(res.result)
+        } else {
+          this.$Message.error(res.message)
+        }
       })
     }
   }
