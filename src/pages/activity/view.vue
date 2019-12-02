@@ -30,24 +30,34 @@
 </template>
 
 <script>
-import { api_view } from './api/activity'
+import {getAction} from '@/api/manage'
+
 export default {
   name: 'ActivityView',
-  data() {
+  data () {
     return {
-      id: '',
       data: {}
     }
   },
-  created() {
-    this.init();
+  created () {
+    this.init(this.$route.params.id)
   },
   methods: {
-    async init() {
-      this.id = this.$route.params.id
-      let _data = await api_view(this.id);
-      let res = _data.data;
-      this.data = res.result
+    init (id) {
+      getAction('/park.service/mgrActivityInfo/queryById', {
+        activityId: id
+      }).then(res => {
+        if (res.success && res.code === 200) {
+          this.data = res.result
+        } else {
+          this.$Message.error(res.message)
+        }
+      })
+    }
+  },
+  watch: {
+    '$route.params.id': function (id) {
+      this.init(id)
     }
   }
 }

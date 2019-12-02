@@ -20,7 +20,7 @@
 <script>
 export default {
   name: 'TenementRepairs',
-  data() {
+  data () {
     return {
       form: {
         oneself: 0,
@@ -33,7 +33,7 @@ export default {
         email: '',
         phone: '',
         relationSite: '',
-        describe: '',
+        describe: ''
       },
       defaultList: [
       ],
@@ -43,11 +43,11 @@ export default {
     }
   },
   methods: {
-    goHome() {
+    goHome () {
       this.$router.push({name: 'HomeIndex'})
     }
 
-  },
+  }
 }
 </script>
 

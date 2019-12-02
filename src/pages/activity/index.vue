@@ -9,10 +9,10 @@
       <div class="content">
         <h4 class="title">活动</h4>
         <div class="card-box">
-          <div class="card" v-for="(item, index) in data" v-on:mouseenter="showDialog(index)" v-on:mouseleave="hideDialog(index)" :accesskey="index">
+          <div class="card" v-for="(item, index) in data" :key="index" v-on:mouseenter="showDialog(index)" v-on:mouseleave="hideDialog(index)" :accesskey="index">
             <div class="card-img">
               <img :src="item.image" alt="">
-              <div class="tier" v-if="ishow && index==current">
+              <div class="tier" v-if="ishow && index === current">
                 <div class="tier-button">
                   <router-link :to="{name: 'ActivityView', params:{ id:item.activityId }}" class="tier-left">详情</router-link>
                   <div class="tier-right" @click="apply(item)">报名</div>
@@ -45,19 +45,19 @@
       <div style="text-align:center; width: 400px; margin: auto;">
         <Form :model="form" label-position="left" :label-width="100">
           <FormItem label="活动名称:">
-            <Input v-model="form.title" disabled="disabled"></Input>
+            <Input v-model="form.title" disabled="disabled"/>
           </FormItem>
           <FormItem label="活动时间:">
-            <Input v-model="form.date" disabled="disabled"></Input>
+            <Input v-model="form.date" disabled="disabled"/>
           </FormItem>
           <FormItem label="报名人">
-            <Input v-model="form.name"></Input>
+            <Input v-model="form.name"/>
           </FormItem>
           <FormItem label="手机号码">
-            <Input v-model="form.phone"></Input>
+            <Input v-model="form.phone"/>
           </FormItem>
           <FormItem label="联系邮箱">
-            <Input v-model="form.email"></Input>
+            <Input v-model="form.email"/>
           </FormItem>
           <FormItem label="备注">
             <Input v-model="form.remark" type="textarea" :rows="5" placeholder="" />
@@ -74,10 +74,11 @@
 </template>
 
 <script>
-import { api_index } from './api/activity'
+import {getAction} from '@/api/manage'
+
 export default {
   name: 'ActivityIndex',
-  data() {
+  data () {
     return {
       ishow: false,
       current: null,
@@ -101,36 +102,44 @@ export default {
       parkId: ''
     }
   },
-  created() {
-    this.init();
+  created () {
+    this.init()
   },
   methods: {
-    async init() {
-      let _data = await api_index(this.keyword,this.parkId,this.pageNo, this.pageSize, this.status);
-      let res = _data.data
-      this.data = res.result.records;
-      this.total = res.result.total
-      console.log(res)
+    init () {
+      let {keyword, parkId, pageNo, pageSize, status} = this
+      getAction('/park.service/mgrActivityInfo/list', {
+        keyword, parkId, pageNo, pageSize, status
+      }).then(res => {
+        if (res.success && res.code === 200) {
+          this.data = res.result.records
+          this.total = res.result.total
+          console.log(res.result)
+        } else {
+          this.$Message.error(res.message)
+        }
+      })
     },
-    showDialog(index, item) {
-      this.ishow = true;
-      this.current = index;
+    showDialog (index, item) {
+      this.ishow = true
+      this.current = index
     },
 
-    hideDialog(index, item) {
-      this.ishow = false;
-      this.current = null;
+    hideDialog (index, item) {
+      this.ishow = false
+      this.current = null
     },
-    apply(data) {
-      if (1 == 1) {
+    apply (data) {
+      let a = 1
+      if (a === 1) {
         return this.$router.push({name: 'LoginIndex'})
       }
-      this.formModal = true;
-      this.form.date = data.date;
-      this.form.title = data.title;
-      this.form.id = data.id;
+      this.formModal = true
+      this.form.date = data.date
+      this.form.title = data.title
+      this.form.id = data.id
     },
-    activityFormCancel() {
+    activityFormCancel () {
       this.formModal = false
     }
   }

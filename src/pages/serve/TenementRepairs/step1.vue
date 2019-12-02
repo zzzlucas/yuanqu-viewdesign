@@ -25,7 +25,7 @@
         <div class="form-box">
           <p class=""><span class="must">*</span>附件：</p>
           <div class="form-radio">
-            <div class="demo-upload-list" v-for="item in uploadList">
+            <div class="demo-upload-list" v-for="(item, key) in uploadList" :key="key">
               <template v-if="item.status === 'finished'">
                 <img :src="item.url">
                 <div class="demo-upload-list-cover">

@@ -7,22 +7,26 @@
     <div class="zj-policy-search">
       <ul>
         <span class="title">政策级别：</span>
-        <li v-for="(level,index) in levelList" @click="levelClass(index)" v-bind:class="{
-         ischeck:index==levelCurrent}">
+        <li v-for="(level, index) in levelList"
+            :key="index"
+            :class="{ischeck:index === levelCurrent}"
+            @click="levelClass(index)">
           {{level.title}}
         </li>
       </ul>
       <ul>
         <span class="title">发布部门：</span>
-        <li v-for="(department,index) in departmentList" @click="departmentClass(index)" v-bind:class="{
-         ischeck:index==departmentCurrent}">
+        <li v-for="(department, index) in departmentList"
+            :key="index"
+            :class="{ischeck: index === departmentCurrent}"
+            @click="departmentClass(index)">
           {{department.title}}
         </li>
       </ul>
     </div>
     <div class="zj-policy-box">
       <div class="zj-policy-left">
-        <div class="zj-policy-item" v-for="item in data">
+        <div class="zj-policy-item" v-for="(item, key) in data" :key="key">
           <h1 class="title">
             <router-link class="title-font" to="/">{{item.title}}</router-link>
           </h1>
@@ -38,7 +42,7 @@
       </div>
       <div class="zj-policy-right">
         <h4 class="zj-policy-right-title">热门动态资讯</h4>
-        <div class="zj-policy-item" v-for="hot in hots">
+        <div class="zj-policy-item" v-for="(hot, key) in hots" :key="key">
           <h1 class="title">{{hot.title}}</h1>
           <p class="text">
             {{hot.text}}
@@ -53,19 +57,19 @@
 <script>
 export default {
   name: 'index',
-  data() {
+  data () {
     return {
       data: [
         {title: '举办“展青春风采，扬热情服务”讲解比赛', date: '09-03 12:00', reading: '10000'},
         {title: '举办“展青春风采，扬热情服务”讲解比赛', date: '09-03 12:00', reading: '10000'},
-        {title: '举办“展青春风采，扬热情服务”讲解比赛', date: '09-03 12:00', reading: '10000'},
+        {title: '举办“展青春风采，扬热情服务”讲解比赛', date: '09-03 12:00', reading: '10000'}
       ],
       hots: [
         {title: '举办“展青春风采，扬热情服务”讲解比赛', text: '县委组织部副部长、县委两新工委书记黄斌及来自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及', date: '09-03 12:00', reading: '10000'},
         {title: '举办“展青春风采，扬热情服务”讲解比赛', text: '县委组织部副部长、县委两新工委书记黄斌及来自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及', date: '09-03 12:00', reading: '10000'},
-        {title: '举办“展青春风采，扬热情服务”讲解比赛', text: '县委组织部副部长、县委两新工委书记黄斌及来自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及', date: '09-03 12:00', reading: '10000'},
+        {title: '举办“展青春风采，扬热情服务”讲解比赛', text: '县委组织部副部长、县委两新工委书记黄斌及来自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及', date: '09-03 12:00', reading: '10000'}
       ],
-      levelCurrent:0,
+      levelCurrent: 0,
       levelList: [
         {title: '不限'},
         {title: '人才政策'},
@@ -73,7 +77,7 @@ export default {
         {title: '财税政策'},
         {title: '专利资助'}
       ],
-      departmentCurrent:0,
+      departmentCurrent: 0,
       departmentList: [
         {title: '不限'},
         {title: '财政局'},
@@ -87,10 +91,10 @@ export default {
   },
 
   methods: {
-    levelClass(index) {
+    levelClass (index) {
       this.levelCurrent = index
     },
-    departmentClass(index) {
+    departmentClass (index) {
       this.departmentCurrent = index
     }
   }

@@ -72,7 +72,7 @@ export default new Router({
         {path: 'serve/NewLandProject/step1', name: 'NewLandProjectStep1', component: NewLandProjectStep1},
         {path: 'serve/NewLandProject/step2', name: 'NewLandProjectStep2', component: NewLandProjectStep2},
         {path: 'serve/NewRentalProject/step1', name: 'NewRentalProjectStep1', component: NewRentalProjectStep1},
-        {path: 'serve/NewRentalProject/step2', name: 'NewRentalProjectStep2', component: NewRentalProjectStep2},
+        {path: 'serve/NewRentalProject/step2', name: 'NewRentalProjectStep2', component: NewRentalProjectStep2}
       ]
     }
   ]

@@ -47,7 +47,7 @@
         <div class="form-box">
           <p class=""><span class="must">*</span>附件：</p>
           <div class="form-radio">
-            <div class="demo-upload-list" v-for="item in uploadList">
+            <div class="demo-upload-list" v-for="(item, key) in uploadList" :key="key">
               <template v-if="item.status === 'finished'">
                 <img :src="item.url">
                 <div class="demo-upload-list-cover">
@@ -98,13 +98,13 @@
 <script>
 export default {
   name: 'UrbanRoadStep1',
-  data() {
+  data () {
     return {
       form: {
         enterpriseName: '',
         agent: '',
         phone: '',
-        name: '',
+        name: ''
       },
       defaultList: [
       ],
@@ -114,41 +114,41 @@ export default {
     }
   },
   methods: {
-    next() {
+    next () {
       this.$router.push({name: 'UrbanRoadStep2'})
     },
     handleView (name) {
-      this.imgName = name;
-      this.visible = true;
+      this.imgName = name
+      this.visible = true
     },
     handleRemove (file) {
-      const fileList = this.$refs.upload.fileList;
-      this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
+      const fileList = this.$refs.upload.fileList
+      this.$refs.upload.fileList.splice(fileList.indexOf(file), 1)
     },
     handleSuccess (res, file) {
-      file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
-      file.name = '7eb99afb9d5f317c912f08b5212fd69a';
+      file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar'
+      file.name = '7eb99afb9d5f317c912f08b5212fd69a'
     },
     handleFormatError (file) {
       this.$Notice.warning({
         title: 'The file format is incorrect',
         desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
-      });
+      })
     },
     handleMaxSize (file) {
       this.$Notice.warning({
         title: 'Exceeding file size limit',
         desc: 'File  ' + file.name + ' is too large, no more than 2M.'
-      });
+      })
     },
     handleBeforeUpload () {
-      const check = this.uploadList.length < 5;
+      const check = this.uploadList.length < 5
       if (!check) {
         this.$Notice.warning({
           title: 'Up to five pictures can be uploaded.'
-        });
+        })
       }
-      return check;
+      return check
     }
   }
 }

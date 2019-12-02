@@ -32,11 +32,11 @@
       <Tabs>
         <TabPane label="全部活动">
           <div class="activity-all">
-             <Card style="width:30%; margin-bottom: 20px;" v-for="(item, index) in proceed">
+             <Card style="width:30%; margin-bottom: 20px;" v-for="(item, index) in proceed" :key="index">
                <div style="text-align:center">
                  <div class="tier-box" v-on:mouseenter="showDialog(index)" v-on:mouseleave="hideDialog(index)" :accesskey="index">
                    <img style="width: 100%;" :src="item.addDocFiles">
-                   <div class="tier" v-if="ishow && index==current">
+                   <div class="tier" v-if="ishow && index === current">
                      <div class="tier-button">
                        <router-link :to="{name: 'ActivityView', params:{ id: item.activityId }}" class="tier-left">详情</router-link>
                        <div class="tier-right" @click="apply(item)">报名</div>
@@ -58,11 +58,11 @@
         </TabPane>
         <TabPane label="往期活动">
           <div class="activity-all">
-            <Card style="width:30%; margin-bottom: 20px;" v-for="(item, index) in before">
+            <Card style="width:30%; margin-bottom: 20px;" v-for="(item, index) in before" :key="index">
               <div style="text-align:center">
                 <div class="tier-box" v-on:mouseenter="showDialog(index)" v-on:mouseleave="hideDialog(index)" :accesskey="index">
                   <img style="width: 100%;" :src="item.addDocFiles">
-                  <div class="tier" v-if="ishow && index==current">
+                  <div class="tier" v-if="ishow && index === current">
                     <div class="tier-button">
                       <div class="tier-left">详情</div>
                       <div class="tier-right" @click="apply(item)">报名</div>
@@ -93,19 +93,19 @@
       <div style="text-align:center; width: 400px; margin: auto;">
         <Form :model="form" label-position="left" :label-width="100">
           <FormItem label="活动名称:">
-            <Input v-model="form.title" disabled="disabled"></Input>
+            <Input v-model="form.title" disabled="disabled"/>
           </FormItem>
           <FormItem label="活动时间:">
-            <Input v-model="form.date" disabled="disabled"></Input>
+            <Input v-model="form.date" disabled="disabled"/>
           </FormItem>
           <FormItem label="报名人">
-            <Input v-model="form.name"></Input>
+            <Input v-model="form.name"/>
           </FormItem>
           <FormItem label="手机号码">
-            <Input v-model="form.phone"></Input>
+            <Input v-model="form.phone"/>
           </FormItem>
           <FormItem label="联系邮箱">
-            <Input v-model="form.email"></Input>
+            <Input v-model="form.email"/>
           </FormItem>
           <FormItem label="备注">
             <Input v-model="form.remark" type="textarea" :rows="5" placeholder="" />
@@ -121,8 +121,9 @@
 </template>
 
 <script>
-import ZjSlider from '../../components/slider/index'
-import { api_activity } from './api/home'
+import ZjSlider from '@comp/slider/index'
+import {getAction} from '@/api/manage'
+
 export default {
   name: 'HomeIndex',
   components: {ZjSlider},
@@ -151,22 +152,36 @@ export default {
       parkId: ''
     }
   },
-
   created () {
     this.activityBefore()
     this.activityProceed()
   },
   methods: {
-    async activityBefore() {
-      let _data = await api_activity(this.keyword,this.parkId,this.pageNo, this.pageSize, 3)
-      let res = _data.data
-      this.before = res.result.records
-      console.log(res.result.records)
+    getData (status) {
+      return new Promise((resolve, reject) => {
+        let {keyword, parkId, pageNo, pageSize} = this
+        getAction('/park.service/mgrActivityInfo/list', {
+          keyword, parkId, pageNo, pageSize, status
+        }).then(res => {
+          if (res.code === 200 && res.success) {
+            resolve(res.result)
+          } else {
+            reject(res.message)
+          }
+        }).catch(err => {
+          reject(err)
+        })
+      })
     },
-    async activityProceed() {
-      let _data = await api_activity(this.keyword,this.parkId,this.pageNo, this.pageSize, 1)
-      let res = _data.data
-      this.proceed = res.result.records
+    activityBefore () {
+      this.getData(3).then(data => {
+        this.before = data.records
+      })
+    },
+    activityProceed () {
+      this.getData(1).then(data => {
+        this.proceed = data.records
+      })
     },
     showDialog (index, item) {
       this.ishow = true
@@ -178,7 +193,8 @@ export default {
       this.current = null
     },
     apply (data) {
-      if (1 == 1) {
+      let a = 1
+      if (a === 1) {
         return this.$router.push({name: 'LoginIndex'})
       }
       this.formModal = true

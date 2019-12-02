@@ -322,7 +322,7 @@
       <div class="form-box">
         <p class=""><span class="must">*</span>附件：</p>
         <div class="form-radio">
-          <div class="demo-upload-list" v-for="item in uploadList">
+          <div class="demo-upload-list" v-for="(item, key) in uploadList" :key="key">
             <template v-if="item.status === 'finished'">
               <img :src="item.url">
               <div class="demo-upload-list-cover">
@@ -397,13 +397,13 @@ export default {
         isTalents: '',
         isForeign: '',
         registeredCapital2: '',
-        email: '',
+        email: ''
       },
       investmentSubjectList: [
         {label: '500强企业', value: 0},
         {label: '大型央企，国企', value: 1},
         {label: '优质民资企业', value: 2},
-        {label: '优质外贸企业', value: 3},
+        {label: '优质外贸企业', value: 3}
       ],
       defaultList: [],
       imgName: '',

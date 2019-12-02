@@ -78,13 +78,13 @@ export default {
         company: '',
         email: '',
         phone: ''
-      },
+      }
     }
   },
   methods: {
     next () {
       this.$router.push({name: 'ParkingApplyStep2'})
-    },
+    }
   }
 }
 </script>

@@ -94,28 +94,28 @@
 <script>
 export default {
   name: 'head',
-  data() {
+  data () {
     return {
       serveMenuShow: false,
-      informationMenuShow: false,
+      informationMenuShow: false
     }
   },
   methods: {
-    showServeMenu() {
-      this.serveMenuShow = true;
+    showServeMenu () {
+      this.serveMenuShow = true
     },
-    hideServeMenu() {
-      this.serveMenuShow = false;
+    hideServeMenu () {
+      this.serveMenuShow = false
     },
-    showInformationMenu() {
-      this.informationMenuShow = true;
+    showInformationMenu () {
+      this.informationMenuShow = true
     },
-    hideInformationMenu() {
-      this.informationMenuShow = false;
+    hideInformationMenu () {
+      this.informationMenuShow = false
     },
-    goRouter(route) {
-      this.$router.push({name: route});
-      this.serveMenuShow = false;
+    goRouter (route) {
+      this.$router.push({name: route})
+      this.serveMenuShow = false
     }
   }
 }

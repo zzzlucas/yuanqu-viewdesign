@@ -6,7 +6,7 @@
     </Breadcrumb>
     <div class="zj-message-box">
       <div class="zj-message-left">
-        <div class="zj-message-item" v-for="item in data">
+        <div class="zj-message-item" v-for="(item, key) in data" :key="key">
           <h1><router-link class="title" to="/">{{item.title}}</router-link></h1>
           <p>
             <router-link class="text" to="/">{{item.text}}</router-link>
@@ -23,7 +23,7 @@
       </div>
       <div class="zj-message-right">
         <h4 class="zj-message-right-title">热门动态资讯</h4>
-        <div class="zj-message-item" v-for="hot in hots">
+        <div class="zj-message-item" v-for="(hot, key) in hots" :key="key">
           <h1 class="title">{{hot.title}}</h1>
           <p class="text">
             {{hot.text}}
@@ -38,18 +38,18 @@
 <script>
 export default {
   name: 'index',
-  data() {
+  data () {
     return {
       data: [
         {title: '举办“展青春风采，扬热情服务”讲解比赛', text: '县委组织部副部长、县委两新工委书记黄斌及来自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及', date: '09-03 12:00', reading: '10000'},
         {title: '举办“展青春风采，扬热情服务”讲解比赛', text: '县委组织部副部长、县委两新工委书记黄斌及来自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及', date: '09-03 12:00', reading: '10000'},
-        {title: '举办“展青春风采，扬热情服务”讲解比赛', text: '县委组织部副部长、县委两新工委书记黄斌及来自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及', date: '09-03 12:00', reading: '10000'},
+        {title: '举办“展青春风采，扬热情服务”讲解比赛', text: '县委组织部副部长、县委两新工委书记黄斌及来自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及', date: '09-03 12:00', reading: '10000'}
       ],
       hots: [
         {title: '举办“展青春风采，扬热情服务”讲解比赛', text: '县委组织部副部长、县委两新工委书记黄斌及来自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及', date: '09-03 12:00', reading: '10000'},
         {title: '举办“展青春风采，扬热情服务”讲解比赛', text: '县委组织部副部长、县委两新工委书记黄斌及来自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及', date: '09-03 12:00', reading: '10000'},
-        {title: '举办“展青春风采，扬热情服务”讲解比赛', text: '县委组织部副部长、县委两新工委书记黄斌及来自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及', date: '09-03 12:00', reading: '10000'},
-      ],
+        {title: '举办“展青春风采，扬热情服务”讲解比赛', text: '县委组织部副部长、县委两新工委书记黄斌及来自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及', date: '09-03 12:00', reading: '10000'}
+      ]
     }
   }
 }

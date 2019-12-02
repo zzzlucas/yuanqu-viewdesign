@@ -8,22 +8,28 @@
     <div class="zj-recruitment-search">
       <ul>
         <span class="title">薪资：</span>
-        <li v-for="(salary,index) in salaryList" @click="salaryClass(index)" v-bind:class="{
-         ischeck:index==salaryCurrent}">
+        <li v-for="(salary, index) in salaryList"
+            :key="index"
+            :class="{ischeck :index === salaryCurrent}"
+            @click="salaryClass(index)">
           {{salary.title}}
         </li>
       </ul>
       <ul>
         <span class="title">经验：</span>
-        <li v-for="(experience,index) in experienceList" @click="experienceClass(index)" v-bind:class="{
-         ischeck:index==experienceCurrent}">
+        <li v-for="(experience, index) in experienceList"
+            :key="index"
+            :class="{ischeck: index === experienceCurrent}"
+            @click="experienceClass(index)">
           {{experience.title}}
         </li>
       </ul>
       <ul>
         <span class="title">学历：</span>
-        <li v-for="(learn,index) in learnList" @click="learnClass(index)" v-bind:class="{
-         ischeck:index==learnCurrent}">
+        <li v-for="(learn, index) in learnList"
+            :key="index"
+            v-bind:class="{ischeck: index === learnCurrent}"
+            @click="learnClass(index)">
           {{learn.title}}
         </li>
       </ul>
@@ -31,7 +37,6 @@
     <div class="zj-recruitment-box">
       <Table :columns="table" :data="data"></Table>
     </div>
-  </div>
   </div>
 </template>
 
@@ -131,7 +136,7 @@ export default {
         {title: '1年以下'},
         {title: '1-2年'},
         {title: '2-3年'},
-        {title: '3年以上'},
+        {title: '3年以上'}
       ],
       learnCurrent: 0,
       learnList: [
@@ -139,7 +144,7 @@ export default {
         {title: '博士'},
         {title: '硕士'},
         {title: '本科'},
-        {title: '大专'},
+        {title: '大专'}
       ]
     }
   },
@@ -163,39 +168,46 @@ export default {
     margin-top: 85px;
     text-align: left;
     background-color: #fff;
+
     .zj-recruitment-title {
       font-size: 18px;
       padding: 0 20px 20px 30px;
     }
+
     .breadcrumb-box {
       padding: 10px;
       border: 1px solid #eee;
       background-color: #fff;
       margin-bottom: 20px;
     }
+
     .zj-recruitment-search {
       background-color: #fff;
       border: 1px solid #eee;
       margin-bottom: 20px;
+
       ul {
         padding: 20px 0 20px 60px;
         display: flex;
+
         .title {
           margin-right: 30px;
           display: block;
           height: 30px;
           line-height: 30px;
         }
+
         li {
           padding: 0 25px;
           height: 30px;
           line-height: 30px;
-          list-style-type:none;
+          list-style-type: none;
           cursor: pointer;
           text-align: center;
           margin-left: 50px;
 
         }
+
         .ischeck {
           background-color: #C40005;
           color: #fff;
@@ -203,6 +215,7 @@ export default {
         }
       }
     }
+
     .zj-recruitment-box {
       margin: 10px 30px;
 
