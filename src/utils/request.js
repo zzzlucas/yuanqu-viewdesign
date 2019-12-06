@@ -1,4 +1,5 @@
 import Axios from 'axios'
+import Store from '../vuex'
 import {Modal, Notice} from 'view-design'
 
 // 创建 Axios 实例
@@ -58,7 +59,7 @@ const err = (error) => {
 
 // request interceptor
 service.interceptors.request.use(config => {
-  const token = localStorage.getItem('AccessToken')
+  const token = Store.state.App.token
   if (token) {
     config.headers['X-Access-Token'] = token // 让每个请求携带自定义 token 请根据实际情况自行修改
   }
