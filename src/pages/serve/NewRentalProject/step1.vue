@@ -125,7 +125,7 @@
                   <Radio label="1">
                     <span>是</span>
                   </Radio>
-                  <Radio label="0">
+                  <Radio label="2">
                     <span>否</span>
                   </Radio>
                 </RadioGroup>
@@ -156,7 +156,7 @@
                   <Radio label="1">
                     <span>是</span>
                   </Radio>
-                  <Radio label="0">
+                  <Radio label="2">
                     <span>否</span>
                   </Radio>
                 </RadioGroup>
@@ -200,12 +200,12 @@
               </FormItem>
             </Col>
             <Col span="12">
-              <FormItem label="建筑密度（%）:">
+              <FormItem label="建筑密度（%）:" prop="buildingDensity">
                 <Input v-model="form.buildingDensity" />
               </FormItem>
             </Col>
             <Col span="12">
-              <FormItem label="容积率（%）:">
+              <FormItem label="容积率（%）:" prop="plotRatio">
                 <Input v-model="form.plotRatio" />
               </FormItem>
             </Col>
@@ -235,7 +235,7 @@
               </FormItem>
             </Col>
             <Col span="12">
-              <FormItem label="全员劳动生产率（%）:">
+              <FormItem label="全员劳动生产率（%）:" prop="productionRate">
                 <Input v-model="form.productionRate" />
               </FormItem>
             </Col>
@@ -373,10 +373,10 @@ export default {
           //直接获取form现有数据
           let formData = this.form;
           //处理时间格式
-          formData.startDate = formData.startAndEndDate
+          formData.startDate = formData.startAndEndDate[0]!=formData.startAndEndDate[1]
             ? moment(formData.startAndEndDate[0]).format("YYYY-MM-DD")
             : null;
-          formData.endDate = formData.startAndEndDate
+          formData.endDate = formData.startAndEndDate[0]!=formData.startAndEndDate[1]
             ? moment(formData.startAndEndDate[1]).format("YYYY-MM-DD")
             : null;
           formData.reportTime = formData.reportTime

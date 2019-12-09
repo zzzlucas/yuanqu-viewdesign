@@ -13,3 +13,17 @@ export async function initDictOptions(dictCode) {
     let res = await ajaxGetDictItems(dictCode);
     return res;
 }
+
+export function filterDictText(dictOptions, text) {
+    let re = "";
+    if (!dictOptions) {
+        return re;
+    }
+    dictOptions.forEach(function (option) {
+        if (text == option.value) {
+            //此处===改为==
+            re = option.text;
+        }
+    });
+    return re;
+}

@@ -1,10 +1,10 @@
 <template>
   <div class="rubbish-disposition-step1">
-    <h1 class="title">新建租赁项目申请</h1>
+    <h1 class="title">新建技改项目申请</h1>
     <div class="schedule">
       <Steps :current="0" status="error">
-        <Step title="新建租赁项目申请"></Step>
-        <Step title="新建租赁项目申请(租赁)成功"></Step>
+        <Step title="新建技改项目申请"></Step>
+        <Step title="新建技改项目申请成功"></Step>
       </Steps>
     </div>
     <Form ref="form" :model="form" :rules="ruleValidate">
@@ -356,6 +356,31 @@
                 <Input v-model="form.foreignEarning" />
               </FormItem>
             </Col>
+          </Row>
+        </div>
+      </div>
+      <div class="rubbish-disposition-form">
+        <p class="title">项目用地</p>
+        <div class="rubbish-disposition-form-body">
+          <Row :gutter="36">
+            <Col span="24">
+              <FormItem label prop="applyReason">
+                <div class="my-input-text">
+                  <p class="myinput">
+                    1.项目总用地面积
+                    <Input v-model="form.totalUseArea" style="width:100px" />平方米；其中：新征用地面积
+                    <Input v-model="form.newUseArea" style="width:100px" />平方米。项目利用企业已有土地的，土地证等证书文件编号
+                    <Input v-model="form.ownLandNumber" style="width:200px;" />。租赁使用其他企业厂房的，出租房土地证等证书文件编号
+                    <Input v-model="form.rentLandNumber" style="width:200px;" />。
+                    <br />2.项目原建筑面积
+                    <Input v-model="form.originalBuildArea" style="width:100px" />平方米，实施技术改造后建筑面积
+                    <Input v-model="form.afterChangeBuildArea" style="width:100px" />平方米。新增建筑面积
+                    <Input v-model="form.newBuildArea" style="width:100px" />平方米。实施技术改造是否涉及主体建筑结构改变
+                    <Input v-model="form.isChangeBuild" style="width:100px" />（填“是”或“否”）。
+                  </p>
+                </div>
+              </FormItem>
+            </Col>
             <Col span="24">
               <FormItem label="项目申请理由简述:" prop="applyReason">
                 <Input type="textarea" :rows="5" v-model="form.applyReason" />
@@ -375,7 +400,7 @@
           </Row>
           <div class="form-box">
             <p class>
-              <span class="must">*</span>附件:
+              <span class="must">*</span>附件（可上传设备清单等）:
             </p>
             <div class="form-radio">
               <div class="demo-upload-list" v-for="(item, key) in uploadList" :key="key">
@@ -416,18 +441,6 @@
                   style="width: 100%"
                 />
               </Modal>
-            </div>
-            <div class="form-box">
-              <p>
-                注意:请先下载需要的表格，
-                <span style="color: red;">填写完毕并进行盖章后以图片或pdf形式进行上传。</span>
-              </p>
-            </div>
-            <div class="form-box">
-              <p>
-                表格下载链接:
-                <span style="color: red;">建筑垃圾处置申请备案表.docx</span>
-              </p>
             </div>
           </div>
         </div>
@@ -498,36 +511,37 @@ export default {
             formData.startAndEndDate[0] != formData.startAndEndDate[1]
               ? moment(formData.startAndEndDate[1]).format("YYYY-MM-DD")
               : null;
+
           //便于提交表单的临时设置
           formData.parkId = "1193719771573518336";
+          //这项设置是长期有效的
+          formData.workFlowUseObject = "test";
           if (!this.editBool) {
             formData.projectName = "前台数据" + formData.projectName;
           }
           formData = qs.stringify(formData);
           if (!this.editBool) {
-            postAction(
-              "/park.project/mgrProjectInfo/addProject",
-              formData
-            ).then(res => {
-              if (res.code === 200 && res.success) {
-                this.$Message.success("表单提交成功！");
-                this.next();
-              } else {
-                this.$Message.error("表单提交失败！");
+            postAction("/park.project/mgrProjectLand/add", formData).then(
+              res => {
+                if (res.code === 200 && res.success) {
+                  this.$Message.success("表单提交成功！");
+                  this.next();
+                } else {
+                  this.$Message.error("表单提交失败！");
+                }
               }
-            });
+            );
           } else {
-            putAction(
-              "/park.project/mgrProjectInfo/editProject",
-              formData
-            ).then(res => {
-              if (res.code === 200 && res.success) {
-                this.$Message.success("表单提交成功！");
-                this.next();
-              } else {
-                this.$Message.error("表单提交失败！");
+            putAction("/park.project/mgrProjectLand/edit", formData).then(
+              res => {
+                if (res.code === 200 && res.success) {
+                  this.$Message.success("表单提交成功！");
+                  this.next();
+                } else {
+                  this.$Message.error("表单提交失败！");
+                }
               }
-            });
+            );
           }
         } else {
           this.$Message.error("请填写所有必填项！");
@@ -544,71 +558,12 @@ export default {
     editMyForm(record) {
       this.editBool = true;
       //当前没有数据record传入 ， 写死一个projectId  ,暂存后的编辑只获取此记录
-      let projectId = "1203149197071613952";
-      getAction("/park.project/mgrProjectInfo/queryProjectById", {
-        projectId: projectId
+      let projectId = "1203185460491321344";
+      getAction("/park.project/mgrProjectLand/queryById", {
+        id: projectId
       }).then(res => {
         let record = res.result;
         //后端部分数据不能直接获取，在此做处理
-        if (record.mgrProjectCust) {
-          record.totalAsset = record.mgrProjectCust.totalAsset;
-          record.legalTel = record.mgrProjectCust.legalTel;
-          record.companyDescription = record.mgrProjectCust.companyDescription;
-          record.updateUserName = record.mgrProjectCust.updateUserName;
-          record.createUserName = record.mgrProjectCust.createUserName;
-          record.updateTime = record.mgrProjectCust.updateTime;
-          record.fillUnit = record.mgrProjectCust.fillUnit;
-          record.version = record.mgrProjectCust.version;
-          record.unitAddress = record.mgrProjectCust.unitAddress;
-          record.companyRegisterType =
-            record.mgrProjectCust.companyRegisterType;
-          record.createBy = record.mgrProjectCust.createBy;
-          record.creditCode = record.mgrProjectCust.creditCode;
-          record.createTime = record.mgrProjectCust.createTime;
-          record.updateBy = record.mgrProjectCust.updateBy;
-          record.legalPerson = record.mgrProjectCust.legalPerson;
-          record.fixedAsset = record.mgrProjectCust.fixedAsset;
-          record.registerMoney = record.mgrProjectCust.registerMoney;
-          record.teamMemberDescription =
-            record.mgrProjectCust.teamMemberDescription;
-          record.setUpYear = record.mgrProjectCust.setUpYear;
-          record.email = record.mgrProjectCust.email;
-        }
-        if (record.mgrProjectInvest) {
-          record.isForeignCapital = record.mgrProjectInvest.isForeignCapital;
-          record.fixedAssetInvest = record.mgrProjectInvest.fixedAssetInvest;
-          record.newProfit = record.mgrProjectInvest.newProfit;
-          record.remark = record.mgrProjectInvest.remark;
-          record.createUserName = record.mgrProjectInvest.createUserName;
-          record.projectUseInvest = record.mgrProjectInvest.projectUseInvest;
-          record.newTax = record.mgrProjectInvest.newTax;
-          record.freeCapital = record.mgrProjectInvest.freeCapital;
-          record.addDocFiles = record.mgrProjectInvest.addDocFiles;
-          record.updateBy = record.mgrProjectInvest.updateBy;
-          record.civilWork = record.mgrProjectInvest.civilWork;
-          record.otherCapital = record.mgrProjectInvest.otherCapital;
-          record.budget = record.mgrProjectInvest.budget;
-          record.bankLoan = record.mgrProjectInvest.bankLoan;
-          record.sharesBond = record.mgrProjectInvest.sharesBond;
-          record.updateUserName = record.mgrProjectInvest.updateUserName;
-          record.updateTime = record.mgrProjectInvest.updateTime;
-          record.foreignEarning = record.mgrProjectInvest.foreignEarning;
-          record.version = record.mgrProjectInvest.version;
-          record.createBy = record.mgrProjectInvest.createBy;
-          record.registerCapital = record.mgrProjectInvest.registerCapital;
-          record.install = record.mgrProjectInvest.install;
-          record.projectBuilding = record.mgrProjectInvest.projectBuilding;
-          record.createTime = record.mgrProjectInvest.createTime;
-          record.investAmount = record.mgrProjectInvest.investAmount;
-          record.bottomWorkingCapital =
-            record.mgrProjectInvest.bottomWorkingCapital;
-          record.newSale = record.mgrProjectInvest.bottomWorkingCapital;
-          record.device = record.mgrProjectInvest.device;
-          record.buildingInterest = record.mgrProjectInvest.buildingInterest;
-        }
-        delete record.mgrProjectCust;
-        delete record.mgrProjectInvest;
-        delete record.mgrProjectInvestLease;
         record.startAndEndDate = [
           record.buildingBeginDate,
           record.buildingEndDate
@@ -663,6 +618,8 @@ export default {
 </script>
 
 <style lang="less">
+.my-input-text {
+}
 .ivu-form-item {
   .ivu-radio-group {
     width: 100%;

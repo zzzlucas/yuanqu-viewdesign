@@ -4,221 +4,315 @@
       <BreadcrumbItem to="/">首页</BreadcrumbItem>
       <BreadcrumbItem to="/components/breadcrumb">人才招聘</BreadcrumbItem>
     </Breadcrumb>
-    <h1 class="zj-recruitment-title">人才招聘</h1>
-    <div class="zj-recruitment-search">
-      <ul>
-        <span class="title">薪资：</span>
-        <li v-for="(salary, index) in salaryList"
+    <div class="recruit-body">
+      <h1 class="zj-recruitment-title">人才招聘</h1>
+      <div class="zj-recruitment-search">
+        <ul>
+          <span class="title">薪资：</span>
+          <!-- 如何往里面塞一个不限 -->
+          <!-- 1.拿数据时候处理一下 -->
+          <!-- 2.渲染时候加 -->
+          <li
+            v-for="(salary, index) in dict.monthlySalary"
             :key="index"
+            :value="salary.value"
             :class="{ischeck :index === salaryCurrent}"
-            @click="salaryClass(index)">
-          {{salary.title}}
-        </li>
-      </ul>
-      <ul>
-        <span class="title">经验：</span>
-        <li v-for="(experience, index) in experienceList"
+            @click="salaryClass(index)"
+            v-model="salaryCurrent"
+          >{{salary.title}}</li>
+          <!-- v-model无效 -->
+        </ul>
+        <ul>
+          <span class="title">经验：</span>
+          <li
+            v-for="(experience, index) in dict.expType"
             :key="index"
             :class="{ischeck: index === experienceCurrent}"
-            @click="experienceClass(index)">
-          {{experience.title}}
-        </li>
-      </ul>
-      <ul>
-        <span class="title">学历：</span>
-        <li v-for="(learn, index) in learnList"
+            @click="experienceClass(index)"
+            v-model="experienceCurrent"
+          >{{experience.title}}</li>
+        </ul>
+        <ul>
+          <span class="title">学历：</span>
+          <li
+            v-for="(learn, index) in dict.educationType"
             :key="index"
-            v-bind:class="{ischeck: index === learnCurrent}"
-            @click="learnClass(index)">
-          {{learn.title}}
-        </li>
-      </ul>
-    </div>
-    <div class="zj-recruitment-box">
-      <Table :columns="table" :data="data"></Table>
+            :class="{ischeck: index === learnCurrent}"
+            @click="learnClass(index)"
+            v-model="learnCurrent"
+          >{{learn.title}}</li>
+        </ul>
+      </div>
+      <div class="zj-recruitment-box">
+        <Table :columns="table" :data="data" @on-row-click="goDetail"></Table>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { getAction, putAction, postAction } from "@/api/manage";
+import moment from "moment";
+import { initDictOptions, filterDictText } from "@/api/dict";
 export default {
-  name: 'RecruitmentIndex',
-  data () {
+  name: "RecruitmentIndex",
+  data() {
     return {
+      isPublic: "1",
+      jobType: "",
+      keyword: "",
+      pageNo: "1",
+      pageSize: "10",
+      parkId: "1193719771573518336",
+      dict: {
+        monthlySalary: "",
+        expType: "",
+        educationType: ""
+      },
       table: [
         {
-          title: '序号',
-          key: 'id'
+          title: "序号",
+          dataIndex: "",
+          key: "recruitId",
+          width: 100,
+          align: "center",
+          render: (h, params) => {
+            return h("div", [h("strong", params.index + 1)]);
+          }
         },
         {
-          title: '职位名称',
-          key: 'name'
+          title: "职位名称",
+          align: "center",
+          key: "jobName"
         },
         {
-          title: '招聘人数',
-          key: 'num'
+          title: "招聘人数",
+          align: "center",
+          key: "jobNum"
         },
         {
-          title: '薪资',
-          key: 'salary'
+          title: "薪资",
+          align: "center",
+          key: "monthlySalary"
         },
         {
-          title: '学历',
-          key: 'learn'
+          title: "学历",
+          align: "center",
+          key: "educationType"
         },
         {
-          title: '经验',
-          key: 'experience'
-        },
-        {
-          title: '预览次数',
-          key: 'preview'
+          title: "经验",
+          align: "center",
+          key: "expType"
         }
+        // {
+        //   title: "预览次数",
+        //   key: "preview"
+        // }
       ],
       data: [
         {
-          id: '1',
-          name: 'IT技术员',
-          num: '18',
-          salary: '8000-20000',
-          learn: '本科以上',
-          experience: '2年以上',
+          id: "1",
+          name: "IT技术员",
+          num: "18",
+          salary: "8000-20000",
+          learn: "本科以上",
+          experience: "2年以上",
           preview: 200
         },
         {
           id: 2,
-          name: 'IT技术员',
-          num: '18',
-          salary: '8000-20000',
-          learn: '本科以上',
-          experience: '2年以上',
-          preview: 200
-        },
-        {
-          id: 3,
-          name: 'IT技术员',
-          num: '18',
-          salary: '8000-20000',
-          learn: '本科以上',
-          experience: '2年以上',
-          preview: 200
-        },
-        {
-          id: 4,
-          name: 'IT技术员',
-          num: '18',
-          salary: '8000-20000',
-          learn: '本科以上',
-          experience: '2年以上',
-          preview: 200
-        },
-        {
-          id: 5,
-          name: 'IT技术员',
-          num: '18',
-          salary: '8000-20000',
-          learn: '本科以上',
-          experience: '2年以上',
+          name: "IT技术员",
+          num: "18",
+          salary: "8000-20000",
+          learn: "本科以上",
+          experience: "2年以上",
           preview: 200
         }
       ],
       salaryCurrent: 0,
-      salaryList: [
-        {title: '不限'},
-        {title: '6K-8K'},
-        {title: '9K-10K'},
-        {title: '10K-15K'},
-        {title: '20K以上'}
-      ],
       experienceCurrent: 0,
-      experienceList: [
-        {title: '不限'},
-        {title: '1年以下'},
-        {title: '1-2年'},
-        {title: '2-3年'},
-        {title: '3年以上'}
-      ],
-      learnCurrent: 0,
-      learnList: [
-        {title: '不限'},
-        {title: '博士'},
-        {title: '硕士'},
-        {title: '本科'},
-        {title: '大专'}
-      ]
-    }
+      learnCurrent: 0
+      // salaryCurrent: "",
+      // experienceCurrent: "",
+      // learnCurrent: ""
+    };
   },
-
+  created() {
+    this.loadData();
+    initDictOptions("education_type").then(res => {
+      if (res.code === 0 && res.success) {
+        res.result.unshift({
+          value: 0,
+          text: "不限",
+          title: "不限"
+        });
+        this.dict.educationType = res.result;
+      }
+    });
+    initDictOptions("exp_type").then(res => {
+      if (res.code === 0 && res.success) {
+        res.result.unshift({
+          value: 0,
+          text: "不限",
+          title: "不限"
+        });
+        this.dict.expType = res.result;
+      }
+    });
+    initDictOptions("monthly_salary").then(res => {
+      if (res.code === 0 && res.success) {
+        res.result.unshift({
+          value: 0,
+          text: "不限",
+          title: "不限"
+        });
+        this.dict.monthlySalary = res.result;
+      }
+    });
+  },
   methods: {
-    salaryClass (index) {
-      this.salaryCurrent = index
+    goDetail(info) {
+      this.$router.push({
+        name: "RecruitmentDetail",
+        params: { id: info.recruitId }
+      });
     },
-    experienceClass (index) {
-      this.experienceCurrent = index
+    // monthlySalary: salaryCurrent,
+    // expType: experienceCurrent,
+    // educationType: learnCurrent,
+    getData(status) {
+      return new Promise((resolve, reject) => {
+        let {
+          salaryCurrent,
+          experienceCurrent,
+          learnCurrent,
+          isPublic,
+          pageNo,
+          pageSize,
+          parkId
+        } = this;
+        getAction("/park.service/mgrRecruitInfo/list", {
+          monthlySalary: salaryCurrent,
+          expType: experienceCurrent,
+          educationType: learnCurrent,
+          isPublic,
+          pageNo,
+          pageSize,
+          parkId
+        })
+          .then(res => {
+            if (res.code === 200 && res.success) {
+              resolve(res.result);
+            } else {
+              reject(res.message);
+            }
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
     },
-    learnClass (index) {
-      this.learnCurrent = index
+    loadData() {
+      this.getData().then(data => {
+        this.data = data.records;
+      });
+    },
+    salaryClass(index) {
+      this.salaryCurrent = index;
+      this.loadData();
+    },
+    experienceClass(index) {
+      this.experienceCurrent = index;
+      this.loadData();
+    },
+    learnClass(index) {
+      this.learnCurrent = index;
+      this.loadData();
     }
+    //后台逻辑，用v-model获取参数
+    //前台逻辑，用click方法传值改变参数
+  }
+};
+</script>
+<style lang="less">
+.ivu-table th {
+  background-color: rgba(242, 242, 242, 0.9);
+}
+
+.recruit-body {
+  padding: 20px;
+  width: 1200px;
+  margin: 20px auto;
+  border: 1px solid rgba(200, 200, 200, 0.5);
+  h1 {
+    font-weight: normal;
+    font-size: 20px;
+  }
+  h3 {
+    font-weight: bold;
+    font-size: 14px;
+    margin: 20px 0;
+  }
+  p {
+    border: 1px solid rgba(200, 200, 200, 0.5);
+    padding: 20px;
+    min-height: 120px;
+    // margin: 20px;
   }
 }
-</script>
+.zj-recruitment-index {
+  margin-top: 85px;
+  text-align: left;
+  background-color: #fff;
 
-<style lang="less">
-  .zj-recruitment-index {
-    margin-top: 85px;
-    text-align: left;
+  .zj-recruitment-title {
+    font-size: 18px;
+    padding: 0 20px 20px 30px;
+  }
+
+  .breadcrumb-box {
+    padding: 10px;
+    border: 1px solid #eee;
     background-color: #fff;
+    margin-bottom: 20px;
+  }
 
-    .zj-recruitment-title {
-      font-size: 18px;
-      padding: 0 20px 20px 30px;
-    }
+  .zj-recruitment-search {
+    background-color: #fff;
+    border: 1px solid #eee;
+    margin-bottom: 20px;
 
-    .breadcrumb-box {
-      padding: 10px;
-      border: 1px solid #eee;
-      background-color: #fff;
-      margin-bottom: 20px;
-    }
+    ul {
+      padding: 20px 0 20px 60px;
+      display: flex;
 
-    .zj-recruitment-search {
-      background-color: #fff;
-      border: 1px solid #eee;
-      margin-bottom: 20px;
+      .title {
+        margin-right: 30px;
+        display: block;
+        height: 30px;
+        line-height: 30px;
+      }
 
-      ul {
-        padding: 20px 0 20px 60px;
-        display: flex;
+      li {
+        padding: 0 25px;
+        height: 30px;
+        line-height: 30px;
+        list-style-type: none;
+        cursor: pointer;
+        text-align: center;
+        margin-left: 50px;
+      }
 
-        .title {
-          margin-right: 30px;
-          display: block;
-          height: 30px;
-          line-height: 30px;
-        }
-
-        li {
-          padding: 0 25px;
-          height: 30px;
-          line-height: 30px;
-          list-style-type: none;
-          cursor: pointer;
-          text-align: center;
-          margin-left: 50px;
-
-        }
-
-        .ischeck {
-          background-color: #C40005;
-          color: #fff;
-
-        }
+      .ischeck {
+        background-color: #c40005;
+        color: #fff;
       }
     }
-
-    .zj-recruitment-box {
-      margin: 10px 30px;
-
-    }
   }
+
+  .zj-recruitment-box {
+    margin: 10px 30px;
+  }
+}
 </style>
