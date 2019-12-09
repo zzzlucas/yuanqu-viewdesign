@@ -36,9 +36,9 @@ import NewRentalProjectStep1 from '@page/serve/NewRentalProject/step1'
 import NewRentalProjectStep2 from '@page/serve/NewRentalProject/step2'
 import NewTechProjectStep1 from '@page/serve/NewTechProject/step1'
 import NewTechProjectStep2 from '@page/serve/NewTechProject/step2'
+import ConferenceReservation from '@page/serve/ConferenceReservation/List'
 
 Vue.use(Router)
-
 export default new Router({
   mode: 'history',
   routes: [
@@ -81,6 +81,7 @@ export default new Router({
         { path: 'serve/NewRentalProject/step2', name: 'NewRentalProjectStep2', component: NewRentalProjectStep2 },
         { path: 'serve/NewTechProject/step1', name: 'NewTechProjectStep1', component: NewTechProjectStep1 },
         { path: 'serve/NewTechProject/step2', name: 'NewTechProjectStep2', component: NewTechProjectStep2 },
+        { path: 'serve/ConferenceReservation', name: 'ConferenceReservation', component: ConferenceReservation },
       ]
     }
   ]

@@ -47,6 +47,7 @@
         <Table :columns="table" :data="data" @on-row-click="goDetail"></Table>
       </div>
     </div>
+    <Spin size="large" fix v-if="spinShow"></Spin>
   </div>
 </template>
 
@@ -58,6 +59,7 @@ export default {
   name: "RecruitmentIndex",
   data() {
     return {
+      spinShow: false,
       isPublic: "1",
       jobType: "",
       keyword: "",
@@ -214,8 +216,10 @@ export default {
       });
     },
     loadData() {
+      this.spinShow = true;
       this.getData().then(data => {
         this.data = data.records;
+        this.spinShow = false;
       });
     },
     salaryClass(index) {
