@@ -29,9 +29,13 @@
       </div>
       <div class="zj-message-right">
         <h4 class="zj-message-right-title">热门动态资讯</h4>
-        <div class="zj-message-item" v-for="(hot, key) in hotsList" :key="key">
-          <h1 class="title">{{hot.title}}</h1>
-          <p class="text">{{hot.text}}</p>
+        <div class="zj-message-item" v-for="(hot, key) in newsListHot" :key="key">
+          <h1>
+            <router-link class="title" :to="'/message/detail/' + hot.newId">{{hot.titile}}</router-link>
+          </h1>
+          <p>
+            <router-link class="text" :to="'/message/detail/' + hot.newId" v-html="hot.text"></router-link>
+          </p>
         </div>
       </div>
     </div>
@@ -41,19 +45,12 @@
 <script>
 import { getAction, putAction, postAction } from "@/api/manage";
 import moment from "moment";
+import { mixinPage } from "@/utils/mixin";
 export default {
   name: "index",
+  mixins: [mixinPage],
   data() {
     return {
-      hotsList: [
-        {
-          title: "举办“展青春风采，扬热情服务”讲解比赛",
-          text:
-            "县委组织部副部长、县委两新工委书记黄斌及来自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及",
-          date: "09-03 12:00",
-          reading: "10000"
-        }
-      ],
       newsInfo: [],
       isPublic: "",
       keyword: "",
@@ -63,9 +60,15 @@ export default {
       type: "4"
     };
   },
+  watch: {
+    $route(val) {
+      this.loadData();
+      console.log('hello zz');
+    }
+  },
   created() {
     console.log("hello 脏脏");
-    this.loadData();
+    this.loadDataHot();
   },
   methods: {
     getData(status) {
@@ -120,7 +123,8 @@ export default {
   }
 }
 .zj-message-index {
-  margin-top: 85px;
+  overflow: hidden; //
+  margin-top: 80px; // 85
   text-align: left;
   background-color: #eee;
   .breadcrumb-box {
@@ -130,6 +134,8 @@ export default {
     margin-bottom: 20px;
   }
   .zj-message-box {
+    width: 1260px;
+    margin: 0 auto;
     display: flex;
     .zj-message-left {
       width: 75%;
@@ -154,8 +160,8 @@ export default {
       }
     }
     .zj-message-right {
-      width: 22%;
-      margin-left: 3%;
+      width: 23%;
+      margin-left: 2%;
       background-color: #fff;
       .zj-message-right-title {
         padding: 20px 15px;

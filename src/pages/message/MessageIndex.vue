@@ -9,7 +9,6 @@
         <div class="zj-message-item" v-for="(item, key) in newsList" :key="key">
           <h1>
             <router-link class="title" :to="'/message/detail/' + item.newId">{{item.titile}}</router-link>
-            <!-- :to="'/home/newsinfo/' + item.id" -->
           </h1>
           <p>
             <router-link class="text" :to="'/message/detail/' + item.newId" v-html="item.text"></router-link>
@@ -25,12 +24,26 @@
             </span>-->
           </div>
         </div>
+        <!-- page -->
+        <div class="pageclass">
+          <Page
+            :total="pageTotal"
+            :page-size="pageSize"
+            :current="pageNo"
+            @on-change="pageCurrentFun"
+            @on-page-size-change="pageSizeFun"
+          />
+        </div>
       </div>
       <div class="zj-message-right">
         <h4 class="zj-message-right-title">热门动态资讯</h4>
-        <div class="zj-message-item" v-for="(hot, key) in hotsList" :key="key">
-          <h1 class="title">{{hot.title}}</h1>
-          <p class="text">{{hot.text}}</p>
+        <div class="zj-message-item" v-for="(hot, key) in newsListHot" :key="key">
+          <h1>
+            <router-link class="title" :to="'/message/detail/' + hot.newId">{{hot.titile}}</router-link>
+          </h1>
+          <p>
+            <router-link class="text" :to="'/message/detail/' + hot.newId" v-html="hot.text"></router-link>
+          </p>
         </div>
       </div>
     </div>
@@ -40,26 +53,17 @@
 <script>
 import { getAction, putAction, postAction } from "@/api/manage";
 import moment from "moment";
+import { mixinPage } from "@/utils/mixin";
 export default {
   name: "index",
+  mixins: [mixinPage],
   data() {
     return {
       newsList: [],
-      hotsList: [
-        {
-          title: "举办“展青春风采，扬热情服务”讲解比赛",
-          text:
-            "县委组织部副部长、县委两新工委书记黄斌及来自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及自县委组织部、县委党校、嘉兴南湖革命纪念馆及",
-          date: "09-03 12:00",
-          reading: "10000"
-        }
-      ],
+      pageSize: 5,
       isPublic: "",
       keyword: "",
-      pageNo: 1,
-      pageSize: 5,
-      parkId: "1193719771573518336",
-      type: ''
+      type: ""
     };
   },
   // computed: {
@@ -72,16 +76,19 @@ export default {
   // },
   watch: {
     //router-link路由切换时，未触发created时的加载
-    $route(val){
+    $route(val) {
       // console.log(val.params.id);
+      this.pageNo = 1;
+      // this.pageCurrent = this.pageNo;
       this.loadData();
     }
   },
   created() {
     this.loadData();
+    this.loadDataHot();
   },
   methods: {
-    getData(status) {
+    getData() {
       return new Promise((resolve, reject) => {
         let { isPublic, keyword, pageNo, pageSize, parkId, type } = this;
         getAction("/park.service/mgrNewsInfo/list", {
@@ -90,7 +97,8 @@ export default {
           pageNo,
           pageSize,
           parkId,
-          type:this.$route.params.id
+          userSortOrder: "no",
+          type: this.$route.params.id
         })
           .then(res => {
             // console.log(this.$route.params.id);
@@ -118,6 +126,8 @@ export default {
           item.text = item.text.trim();
         }
         this.newsList = data.records;
+        //页码总数未改变
+        this.pageTotal = data.total;
       });
     }
   }
@@ -126,9 +136,14 @@ export default {
 
 <style lang="less">
 .zj-message-index {
+  overflow: hidden;
   margin-top: 85px;
   text-align: left;
   background-color: #eee;
+  .pageclass {
+    margin: 30px auto;
+    text-align: center;
+  }
   .breadcrumb-box {
     padding: 10px;
     border: 1px solid #eee;
@@ -136,6 +151,8 @@ export default {
     margin-bottom: 20px;
   }
   .zj-message-box {
+    width: 1260px;
+    margin: 0 auto;
     display: flex;
     .zj-message-left {
       width: 75%;
@@ -151,6 +168,7 @@ export default {
         }
         .text {
           color: rgb(153, 153, 153);
+          word-break: break-all;
         }
         .info {
           font-size: 12px;
@@ -160,8 +178,8 @@ export default {
       }
     }
     .zj-message-right {
-      width: 22%;
-      margin-left: 3%;
+      width: 23%;
+      margin-left: 2%;
       background-color: #fff;
       .zj-message-right-title {
         padding: 20px 15px;
@@ -186,6 +204,7 @@ export default {
           color: rgb(153, 153, 153);
           overflow: hidden;
           text-overflow: ellipsis;
+          word-break: break-all;
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;

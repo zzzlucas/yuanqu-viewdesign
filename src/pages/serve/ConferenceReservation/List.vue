@@ -4,7 +4,7 @@
       <BreadcrumbItem to="/">首页</BreadcrumbItem>
       <BreadcrumbItem to="/components/breadcrumb">会议室预订</BreadcrumbItem>
     </Breadcrumb>
-    <div class="recruit-body">
+    <div class="meeting-body">
       <h1 class="zj-recruitment-title">会议室预订</h1>
       <div class="zj-recruitment-search">
         <ul>
@@ -16,18 +16,19 @@
             @click="capacityClass(index)"
           >{{capacity.title}}</li>
         </ul>
+
         <ul>
           <span class="title">设备提供：</span>
           <li
             v-for="(device, index) in dict.meetingRoomDevice"
             :key="index"
-            :class="{ischeck: index === deviceCurrent}"
+            :class="{ischeck: deviceCurrent.includes(index)}"
             @click="deviceClass(index)"
           >{{device.title}}</li>
         </ul>
       </div>
       <div class="zj-recruitment-box">
-        <Table :columns="table" :data="data" @on-row-click="goDetail">
+        <Table :columns="table" :data="data">
           <!-- table start -->
           <template slot-scope="{ row, index }" slot="roomName">
             <div class="room-block-left">
@@ -56,7 +57,6 @@
             <span>{{ row.chargingArea }}m²</span>
           </template>
           <template slot-scope="{ row, index }" slot="action">
-            <!-- <Button @click.stop="handleCheck(index)">预定</Button> -->
             <a @click.stop="handleCheck(row)">预定</a>
           </template>
           <!-- table end -->
@@ -83,35 +83,23 @@ import { getAction, putAction, postAction } from "@/api/manage";
 import moment from "moment";
 import { initDictOptions, filterDictText } from "@/api/dict";
 import ModalForm from "./ModalForm";
+import { mixinPage } from "@/utils/mixin";
+
 export default {
   name: "RecruitmentIndex",
   components: { ModalForm },
+  mixins: [mixinPage],
   data() {
     return {
-      pageTotal: 10,
-      spinShow: false,
       isPublic: "1",
       jobType: "",
       keyword: "",
-      pageNo: "1",
-      pageSize: "10",
-      parkId: "1193719771573518336",
       dict: {
         monthlySalary: "",
         expType: "",
         educationType: ""
       },
       table: [
-        // {
-        //   title: "序号",
-        //   dataIndex: "",
-        //   key: "recruitId",
-        //   width: 100,
-        //   align: "center",
-        //   render: (h, params) => {
-        //     return h("div", [h("strong", params.index + 1)]);
-        //   }
-        // },
         {
           title: "名称-位置",
           align: "left",
@@ -153,7 +141,7 @@ export default {
         meetingRoomDevice: []
       },
       capacityCurrent: 0,
-      deviceCurrent: 0,
+      deviceCurrent: [0],
       ary: {
         meetingRoomCapacityAry: [],
         meetingRoomDeviceAry: []
@@ -164,7 +152,6 @@ export default {
     };
   },
   created() {
-    this.loadData();
     initDictOptions("	meeting_room_capacity").then(res => {
       if (res.code === 0 && res.success) {
         res.result.unshift({
@@ -190,31 +177,17 @@ export default {
         for (let item of this.dict.meetingRoomDevice) {
           this.ary.meetingRoomDeviceAry.push(item.value);
         }
+        //纯粹数组
         console.log(this.ary.meetingRoomDeviceAry);
       }
     });
   },
   methods: {
-    pageCurrentFun(i) {
-      this.pageNo = i;
-      this.loadData();
-    },
-    pageSizeFun(i) {
-      this.pageSize = i;
-      this.loadData();
-    },
-
     getRoomPreview(files) {
       return files.split(",")[0];
     },
     handleCheck(record) {
       this.$refs.ModalForm.check(record);
-    },
-    goDetail(info) {
-      this.$router.push({
-        name: "RecruitmentDetail",
-        params: { id: info.recruitId }
-      });
     },
     getData(status) {
       return new Promise((resolve, reject) => {
@@ -229,7 +202,7 @@ export default {
         getAction("/park.service/baseMeetingroomInfo/list", {
           maxCapacity,
           minCapacity,
-          device,
+          device: String(device),
           pageNo,
           pageSize,
           parkId
@@ -248,11 +221,17 @@ export default {
     },
     loadData() {
       // this.spinShow = true;
-      this.getData().then(data => {
-        this.data = data.records;
-        this.pageTotal = data.total;
-        this.spinShow = false;
-      });
+      this.getData().then(
+        data => {
+          this.data = data.records;
+          this.pageTotal = data.total;
+          this.spinShow = false;
+        },
+        error => {
+          this.data = [];
+          // console.log(error);
+        }
+      );
     },
     capacityClass(index) {
       this.capacityCurrent = index;
@@ -270,11 +249,40 @@ export default {
       this.loadData();
     },
     deviceClass(index) {
-      this.deviceCurrent = index;
+      //要求：选中任意具体项，不限跳闸；选中不限，其余全部跳闸
+      if (index == 0) {
+        //选中为0，清空数组，留0
+        this.deviceCurrent = ["0"];
+        //清空，不填0，下面会有对于逻辑来填0的
+        this.device = [];
+      } else {
+        //选中不为0，0跳闸，不过此时传参依旧含0
+        console.log(this.deviceCurrent);
+        //返回的是被删除的那段   为什么上一次留下的反而被删了
+        let a = this.deviceCurrent.splice(this.deviceCurrent.indexOf(0), 1);
+        console.log(a);
+        console.log(this.deviceCurrent);
+        this.device.splice(this.device.indexOf(0), 1);
+      }
+
+      //有则减  无则加
+      if (this.deviceCurrent.includes(index)) {
+        console.log("1");
+        this.deviceCurrent.splice(this.deviceCurrent.indexOf(index), 1);
+      } else {
+        console.log("2");
+        this.deviceCurrent.push(index);
+        console.log(this.deviceCurrent);
+      }
+
+      //有则减  无则加
       let DEVICE = this.ary.meetingRoomDeviceAry[index];
-      //device 是 ids
-      //点击添加，再点除去  并且样式跟随
-      this.device.push(DEVICE);
+      if (this.device.includes(DEVICE)) {
+        this.device.splice(this.device.indexOf(DEVICE), 1);
+      } else {
+        this.device.push(DEVICE);
+      }
+
       console.log(this.device);
       this.loadData();
     }
@@ -325,9 +333,9 @@ export default {
   .ivu-table th {
     background-color: rgba(242, 242, 242, 0.9);
   }
-  .recruit-body {
+  .meeting-body {
     padding: 20px;
-    width: 1200px;
+    width: 1260px;
     margin: 20px auto;
     border: 1px solid rgba(200, 200, 200, 0.5);
     h1 {

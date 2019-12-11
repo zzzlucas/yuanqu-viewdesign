@@ -48,7 +48,7 @@
             <ul>
               <p class="serve-menu-title">空间</p>
               <li @click="goRouter('ConferenceReservation')">会议室预定</li>
-              <li>广告位预定</li>
+              <li @click="goRouter('AdvertisingReservation')">广告位预定</li>
             </ul>
           </div>
         </li>

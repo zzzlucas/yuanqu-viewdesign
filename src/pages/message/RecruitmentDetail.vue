@@ -196,31 +196,31 @@ export default {
   }
 };
 </script>
-<style lang="less" scope>
-.recruit-body {
-  padding: 20px;
-  width: 1200px;
-  margin: 20px auto;
-  border: 1px solid rgba(200, 200, 200, 0.5);
-  h1 {
-    font-weight: normal;
-    font-size: 20px;
-  }
-  h3 {
-    font-weight: bold;
-    font-size: 14px;
-    margin: 20px 0;
-  }
-  p {
-    border: 1px solid rgba(200, 200, 200, 0.5);
-    padding: 20px;
-    min-height: 120px;
-    // margin: 20px;
-  }
-}
+<style lang="less">
 //12.09
-@PRESENTWIDTH: 1160px;
+@PRESENTWIDTH: 1220px;
 .zj-recruitment-detail {
+  .recruit-body {
+    padding: 20px;
+    width: 1260px;
+    margin: 20px auto;
+    border: 1px solid rgba(200, 200, 200, 0.5);
+    h1 {
+      font-weight: normal;
+      font-size: 20px;
+    }
+    h3 {
+      font-weight: bold;
+      font-size: 14px;
+      margin: 20px 0;
+    }
+    p {
+      border: 1px solid rgba(200, 200, 200, 0.5);
+      padding: 20px;
+      min-height: 120px;
+      // margin: 20px;
+    }
+  }
   table {
     font-size: 14px;
     width: @PRESENTWIDTH;
@@ -251,9 +251,7 @@ export default {
       }
     }
   }
-  .sec-body {
-    // padding: 20px;
-  }
+
 }
 .zj-recruitment-detail {
   margin-top: 85px;

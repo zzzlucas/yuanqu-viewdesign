@@ -95,49 +95,50 @@ export default {
         {
           title: "薪资",
           align: "center",
-          key: "monthlySalary"
+          key: "monthlySalary",
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "span",
+                filterDictText(
+                  this.dict.monthlySalary,
+                  params.row.monthlySalary
+                )
+              )
+            ]);
+          }
         },
         {
           title: "学历",
           align: "center",
-          key: "educationType"
+          key: "educationType",
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "span",
+                filterDictText(
+                  this.dict.educationType,
+                  params.row.educationType
+                )
+              )
+            ]);
+          }
         },
         {
           title: "经验",
           align: "center",
-          key: "expType"
-        }
-        // {
-        //   title: "预览次数",
-        //   key: "preview"
-        // }
-      ],
-      data: [
-        {
-          id: "1",
-          name: "IT技术员",
-          num: "18",
-          salary: "8000-20000",
-          learn: "本科以上",
-          experience: "2年以上",
-          preview: 200
-        },
-        {
-          id: 2,
-          name: "IT技术员",
-          num: "18",
-          salary: "8000-20000",
-          learn: "本科以上",
-          experience: "2年以上",
-          preview: 200
+          key: "expType",
+          render: (h, params) => {
+            return h("div", [
+              h("p", filterDictText(this.dict.expType, params.row.expType))
+            ]);
+          }
         }
       ],
+      data: [],
       salaryCurrent: 0,
       experienceCurrent: 0,
       learnCurrent: 0
-      // salaryCurrent: "",
-      // experienceCurrent: "",
-      // learnCurrent: ""
     };
   },
   created() {
@@ -240,36 +241,33 @@ export default {
 };
 </script>
 <style lang="less">
-.ivu-table th {
-  background-color: rgba(242, 242, 242, 0.9);
-}
-
-.recruit-body {
-  padding: 20px;
-  width: 1200px;
-  margin: 20px auto;
-  border: 1px solid rgba(200, 200, 200, 0.5);
-  h1 {
-    font-weight: normal;
-    font-size: 20px;
-  }
-  h3 {
-    font-weight: bold;
-    font-size: 14px;
-    margin: 20px 0;
-  }
-  p {
-    border: 1px solid rgba(200, 200, 200, 0.5);
-    padding: 20px;
-    min-height: 120px;
-    // margin: 20px;
-  }
-}
 .zj-recruitment-index {
+  .ivu-table th {
+    background-color: rgba(242, 242, 242, 0.9);
+  }
+  .recruit-body {
+    padding: 20px;
+    width: 1260px;
+    margin: 20px auto;
+    border: 1px solid rgba(200, 200, 200, 0.5);
+    h1 {
+      font-weight: normal;
+      font-size: 20px;
+    }
+    h3 {
+      font-weight: bold;
+      font-size: 14px;
+      margin: 20px 0;
+    }
+  }
   margin-top: 85px;
   text-align: left;
   background-color: #fff;
-
+  .ivu-table-tbody {
+    .ivu-table-row {
+      cursor: pointer;
+    }
+  }
   .zj-recruitment-title {
     font-size: 18px;
     padding: 0 20px 20px 30px;

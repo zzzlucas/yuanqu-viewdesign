@@ -37,6 +37,7 @@ import NewRentalProjectStep2 from '@page/serve/NewRentalProject/step2'
 import NewTechProjectStep1 from '@page/serve/NewTechProject/step1'
 import NewTechProjectStep2 from '@page/serve/NewTechProject/step2'
 import ConferenceReservation from '@page/serve/ConferenceReservation/List'
+import AdvertisingReservation from '@page/serve/AdvertisingReservation/List'
 
 Vue.use(Router)
 export default new Router({
@@ -65,7 +66,7 @@ export default new Router({
         { path: 'serve/ParkingApply/step2', name: 'ParkingApplyStep2', component: ParkingApplyStep2 },
         { path: 'serve/ItRepairs/step1', name: 'ItRepairsStep1', component: ItRepairsStep1 },
         { path: 'serve/ItRepairs/step2', name: 'ItRepairsStep2', component: ItRepairsStep2 },
-        { path: 'serve/AdvertisingApply/step1', name: 'AdvertisingApplyStep1', component: AdvertisingApplyStep1 },
+        { path: 'serve/AdvertisingApply/step1/:id', name: 'AdvertisingApplyStep1', component: AdvertisingApplyStep1 },
         { path: 'serve/AdvertisingApply/step2', name: 'AdvertisingApplyStep2', component: AdvertisingApplyStep2 },
         { path: 'serve/PublicFacilities/step1', name: 'PublicFacilitiesStep1', component: PublicFacilitiesStep1 },
         { path: 'serve/PublicFacilities/step2', name: 'PublicFacilitiesStep2', component: PublicFacilitiesStep2 },
@@ -82,6 +83,7 @@ export default new Router({
         { path: 'serve/NewTechProject/step1', name: 'NewTechProjectStep1', component: NewTechProjectStep1 },
         { path: 'serve/NewTechProject/step2', name: 'NewTechProjectStep2', component: NewTechProjectStep2 },
         { path: 'serve/ConferenceReservation', name: 'ConferenceReservation', component: ConferenceReservation },
+        { path: 'serve/AdvertisingReservation', name: 'AdvertisingReservation', component: AdvertisingReservation },
       ]
     }
   ]
