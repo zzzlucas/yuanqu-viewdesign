@@ -4,8 +4,10 @@ import Layout from '@comp/layout/index'
 import HomeIndex from '@page/home/index'
 import LoginIndex from '@page/login/index'
 import ActivityIndex from '@page/activity/index'
-import MessageIndex from '@page/message/index'
+import MessageIndex from '@page/message/MessageIndex'
+import MessageDetail from '@page/message/MessageDetail'
 import RecruitmentIndex from '@page/message/RecruitmentIndex'
+import RecruitmentDetail from '@page/message/RecruitmentDetail'
 import PolicyIndex from '@page/policy/index'
 import ActivityView from '@page/activity/view'
 import TenementRepairsStep1 from '@page/serve/TenementRepairs/step1'
@@ -32,9 +34,12 @@ import NewLandProjectStep1 from '@page/serve/NewLandProject/step1'
 import NewLandProjectStep2 from '@page/serve/NewLandProject/step2'
 import NewRentalProjectStep1 from '@page/serve/NewRentalProject/step1'
 import NewRentalProjectStep2 from '@page/serve/NewRentalProject/step2'
+import NewTechProjectStep1 from '@page/serve/NewTechProject/step1'
+import NewTechProjectStep2 from '@page/serve/NewTechProject/step2'
+import ConferenceReservation from '@page/serve/ConferenceReservation/List'
+import AdvertisingReservation from '@page/serve/AdvertisingReservation/List'
 
 Vue.use(Router)
-
 export default new Router({
   mode: 'history',
   routes: [
@@ -42,37 +47,43 @@ export default new Router({
       path: '/',
       component: Layout,
       children: [
-        {path: 'home/index', name: 'HomeIndex', component: HomeIndex},
-        {path: 'login/index', name: 'LoginIndex', component: LoginIndex},
-        {path: 'activity/index', name: 'ActivityIndex', component: ActivityIndex},
-        {path: 'message/index', name: 'MessageIndex', component: MessageIndex},
-        {path: 'message/RecruitmentIndex', name: 'RecruitmentIndex', component: RecruitmentIndex},
-        {path: 'policy/index', name: 'PolicyIndex', component: PolicyIndex},
-        {path: 'activity/view/:id', name: 'ActivityView', component: ActivityView},
-        {path: 'serve/TenementRepairs/step1', name: 'TenementRepairsStep1', component: TenementRepairsStep1},
-        {path: 'serve/TenementRepairs/step2', name: 'TenementRepairsStep2', component: TenementRepairsStep2},
-        {path: 'serve/TenementAppeal/step1', name: 'TenementAppealStep1', component: TenementAppealStep1},
-        {path: 'serve/TenementAppeal/step2', name: 'TenementAppealStep2', component: TenementAppealStep2},
-        {path: 'serve/DemandSubmission/step1', name: 'DemandSubmissionStep1', component: DemandSubmissionStep1},
-        {path: 'serve/DemandSubmission/step2', name: 'DemandSubmissionStep2', component: DemandSubmissionStep2},
-        {path: 'serve/ParkingApply/step1', name: 'ParkingApplyStep1', component: ParkingApplyStep1},
-        {path: 'serve/ParkingApply/step2', name: 'ParkingApplyStep2', component: ParkingApplyStep2},
-        {path: 'serve/ItRepairs/step1', name: 'ItRepairsStep1', component: ItRepairsStep1},
-        {path: 'serve/ItRepairs/step2', name: 'ItRepairsStep2', component: ItRepairsStep2},
-        {path: 'serve/AdvertisingApply/step1', name: 'AdvertisingApplyStep1', component: AdvertisingApplyStep1},
-        {path: 'serve/AdvertisingApply/step2', name: 'AdvertisingApplyStep2', component: AdvertisingApplyStep2},
-        {path: 'serve/PublicFacilities/step1', name: 'PublicFacilitiesStep1', component: PublicFacilitiesStep1},
-        {path: 'serve/PublicFacilities/step2', name: 'PublicFacilitiesStep2', component: PublicFacilitiesStep2},
-        {path: 'serve/EnterprisesRecord/step1', name: 'EnterprisesRecordStep1', component: EnterprisesRecordStep1},
-        {path: 'serve/EnterprisesRecord/step2', name: 'EnterprisesRecordStep2', component: EnterprisesRecordStep2},
-        {path: 'serve/RubbishDisposition/step1', name: 'RubbishDispositionStep1', component: RubbishDispositionStep1},
-        {path: 'serve/RubbishDisposition/step2', name: 'RubbishDispositionStep2', component: RubbishDispositionStep2},
-        {path: 'serve/UrbanRoad/step1', name: 'UrbanRoadStep1', component: UrbanRoadStep1},
-        {path: 'serve/UrbanRoad/step2', name: 'UrbanRoadStep2', component: UrbanRoadStep2},
-        {path: 'serve/NewLandProject/step1', name: 'NewLandProjectStep1', component: NewLandProjectStep1},
-        {path: 'serve/NewLandProject/step2', name: 'NewLandProjectStep2', component: NewLandProjectStep2},
-        {path: 'serve/NewRentalProject/step1', name: 'NewRentalProjectStep1', component: NewRentalProjectStep1},
-        {path: 'serve/NewRentalProject/step2', name: 'NewRentalProjectStep2', component: NewRentalProjectStep2}
+        { path: 'home/index', name: 'HomeIndex', component: HomeIndex },
+        { path: 'login/index', name: 'LoginIndex', component: LoginIndex },
+        { path: 'activity/index', name: 'ActivityIndex', component: ActivityIndex },
+        { path: 'message/index/:id', name: 'MessageIndex', component: MessageIndex },
+        { path: 'message/detail/:id', name: 'MessageDetail', component: MessageDetail },
+        { path: 'message/RecruitmentIndex', name: 'RecruitmentIndex', component: RecruitmentIndex },
+        { path: 'message/RecruitmentDetail/:id', name: 'RecruitmentDetail', component: RecruitmentDetail },
+        { path: 'policy/index', name: 'PolicyIndex', component: PolicyIndex },
+        { path: 'activity/view/:id', name: 'ActivityView', component: ActivityView },
+        { path: 'serve/TenementRepairs/step1', name: 'TenementRepairsStep1', component: TenementRepairsStep1 },
+        { path: 'serve/TenementRepairs/step2', name: 'TenementRepairsStep2', component: TenementRepairsStep2 },
+        { path: 'serve/TenementAppeal/step1', name: 'TenementAppealStep1', component: TenementAppealStep1 },
+        { path: 'serve/TenementAppeal/step2', name: 'TenementAppealStep2', component: TenementAppealStep2 },
+        { path: 'serve/DemandSubmission/step1', name: 'DemandSubmissionStep1', component: DemandSubmissionStep1 },
+        { path: 'serve/DemandSubmission/step2', name: 'DemandSubmissionStep2', component: DemandSubmissionStep2 },
+        { path: 'serve/ParkingApply/step1', name: 'ParkingApplyStep1', component: ParkingApplyStep1 },
+        { path: 'serve/ParkingApply/step2', name: 'ParkingApplyStep2', component: ParkingApplyStep2 },
+        { path: 'serve/ItRepairs/step1', name: 'ItRepairsStep1', component: ItRepairsStep1 },
+        { path: 'serve/ItRepairs/step2', name: 'ItRepairsStep2', component: ItRepairsStep2 },
+        { path: 'serve/AdvertisingApply/step1/:id', name: 'AdvertisingApplyStep1', component: AdvertisingApplyStep1 },
+        { path: 'serve/AdvertisingApply/step2', name: 'AdvertisingApplyStep2', component: AdvertisingApplyStep2 },
+        { path: 'serve/PublicFacilities/step1', name: 'PublicFacilitiesStep1', component: PublicFacilitiesStep1 },
+        { path: 'serve/PublicFacilities/step2', name: 'PublicFacilitiesStep2', component: PublicFacilitiesStep2 },
+        { path: 'serve/EnterprisesRecord/step1', name: 'EnterprisesRecordStep1', component: EnterprisesRecordStep1 },
+        { path: 'serve/EnterprisesRecord/step2', name: 'EnterprisesRecordStep2', component: EnterprisesRecordStep2 },
+        { path: 'serve/RubbishDisposition/step1', name: 'RubbishDispositionStep1', component: RubbishDispositionStep1 },
+        { path: 'serve/RubbishDisposition/step2', name: 'RubbishDispositionStep2', component: RubbishDispositionStep2 },
+        { path: 'serve/UrbanRoad/step1', name: 'UrbanRoadStep1', component: UrbanRoadStep1 },
+        { path: 'serve/UrbanRoad/step2', name: 'UrbanRoadStep2', component: UrbanRoadStep2 },
+        { path: 'serve/NewLandProject/step1', name: 'NewLandProjectStep1', component: NewLandProjectStep1 },
+        { path: 'serve/NewLandProject/step2', name: 'NewLandProjectStep2', component: NewLandProjectStep2 },
+        { path: 'serve/NewRentalProject/step1', name: 'NewRentalProjectStep1', component: NewRentalProjectStep1 },
+        { path: 'serve/NewRentalProject/step2', name: 'NewRentalProjectStep2', component: NewRentalProjectStep2 },
+        { path: 'serve/NewTechProject/step1', name: 'NewTechProjectStep1', component: NewTechProjectStep1 },
+        { path: 'serve/NewTechProject/step2', name: 'NewTechProjectStep2', component: NewTechProjectStep2 },
+        { path: 'serve/ConferenceReservation', name: 'ConferenceReservation', component: ConferenceReservation },
+        { path: 'serve/AdvertisingReservation', name: 'AdvertisingReservation', component: AdvertisingReservation },
       ]
     }
   ]

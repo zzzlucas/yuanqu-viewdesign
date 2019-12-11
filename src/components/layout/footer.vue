@@ -12,7 +12,7 @@
         <ul>
           <h4 class="title">关于我们</h4>
           <li>嘉善XXX信息服务有限公司</li>
-          <li>浙江智界网络科技有限公司</li>
+          <li>浙江XXXXXX有限公司</li>
         </ul>
         <ul>
           <h4 class="title">快速通道</h4>
