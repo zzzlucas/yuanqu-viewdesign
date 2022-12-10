@@ -19,7 +19,7 @@
     "less-loader": "^5.0.0",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
-    "qs": "^6.9.1",
+    "qs": "^6.9.7",
     "view-design": "^4.0.2",
     "vue": "^2.5.2",
     "vue-awesome-swiper": "^3.1.3",
